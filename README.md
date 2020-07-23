@@ -19,16 +19,24 @@ async function fetchUserImage(uid) {
     return userDto.image;
 }
 
-const userImage = withFallback(() => fetchUserImage(1), 'default_profile.png');
-// fetchUserImage throws => 'default_profile.png'
+const userImage = withFallback(() => fetchUserImage(1), {
+    url: 'default_profile.png',
+    width: 50,
+    height: 50,
+});
 ```
 
 ## Api
 
-### withFallback(fetcher, fallback)
+### withFallback(fetcher, fallback, options)
 
 Arguments:
  - `fetcher: () => Promise<ValueType>` - an async / sync function that returns a value of type \<ValueType>.
  - `fallback: ValueType` - a fallback value of type \<ValueType> that will be returned in case `fetcher` fails (throws)
+ - `logger: (error: Any) => void` - a logger which will be invoked when a fallback occours.
+ (default logger is `console.warn`)
 
 Return Value: `Promise<ValueType>`
+
+## Typescript
+`withFallback` is strongly typed. When used in typescript projects, it enforces the fallback value to be of the same type of the fetcher's returned value.

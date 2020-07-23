@@ -1,4 +1,4 @@
-import { withFallback } from ".";
+import { withFallback } from "./with-fallback";
 
 describe('with fallback', () => {
     const expectedValue = 'some-value';

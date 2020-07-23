@@ -1,4 +1,4 @@
-export async function withFallback<ResponseType>(fetcher: () => Promise<ResponseType>, fallback: ResponseType) {
+export async function withFallback<ValueType>(fetcher: () => Promise<ValueType>, fallback: ValueType): Promise<ValueType> {
     try {
         const response = await fetcher();
         return response;

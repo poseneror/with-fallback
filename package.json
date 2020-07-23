@@ -1,13 +1,13 @@
 {
   "name": "with-fallback",
   "version": "0.0.1",
-  "description": "",
+  "description": "An all-in-one fallback solution",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "jest --watchAll",
     "test": "jest",
-    "prepublish": "tsc"
+    "prepare": "tsc"
   },
   "outDir": "dist",
   "keywords": [],

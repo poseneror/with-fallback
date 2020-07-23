@@ -1,4 +1,5 @@
-# with-fallback [![npm version](https://badge.fury.io/js/with-fallback.svg)](https://badge.fury.io/js/with-fallback)
+# with-fallback
+[![npm version](https://badge.fury.io/js/with-fallback.svg)](https://badge.fury.io/js/with-fallback)
 
 Wraps a function with a fallback value which will be returned in case the function fails.
 

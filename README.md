@@ -1,4 +1,5 @@
-# with-fallback [![npm version](https://badge.fury.io/js/with-fallback.svg)](https://badge.fury.io/js/with-fallback)
+# with-fallback
+[![npm version](https://badge.fury.io/js/with-fallback.svg)](https://badge.fury.io/js/with-fallback)
 
 Wraps a function with a fallback value which will be returned in case the function fails.
 
@@ -40,3 +41,4 @@ Return Value: `Promise<ValueType>`
 
 ## Typescript
 `withFallback` is strongly typed. When used in typescript projects, it enforces the fallback value to be of the same type of the fetcher's returned value.
+

@@ -2,10 +2,6 @@
 
 Wraps a function with a fallback value which will be returned in case the function fails.
 
-Uses defaults:
- - timeout: 10s;
- - interval: 200ms;
-
 ## install
 
 ```bash

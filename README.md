@@ -29,8 +29,8 @@ const userImage = withFallback(() => fetchUserImage(1), 'default_profile.png');
 
 ## Api
 
-### withFallback(fetcher: () => Promise<ValueType>, fallback: ValueType): Promise<ValueType>
+### withFallback(fetcher: () => Promise\<ValueType>, fallback: ValueType): Promise\<ValueType>
 
 Arguments:
- - fetcher - an async / sync function that returns a value of type <ValueType>.
- - fallback - a fallback value of type <ValueType> that will be returned in case *fetcher* fails (throws)
+ - fetcher - an async / sync function that returns a value of type \<ValueType>.
+ - fallback - a fallback value of type \<ValueType> that will be returned in case *fetcher* fails (throws)

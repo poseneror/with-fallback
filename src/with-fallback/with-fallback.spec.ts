@@ -40,7 +40,7 @@ describe('with fallback', () => {
         expect(logger).toHaveBeenCalledWith(expectedError);
     });
     describe('retry', () => {
-        fit('should retry on fetcher failure with default duration', async () => {
+        it('should retry on fetcher failure with default duration', async () => {
             const expectedError = new Error('some-error-message')
             const duration = 1000;
             const fetcher = jest.fn().mockResolvedValue(expectedValue)
@@ -52,6 +52,18 @@ describe('with fallback', () => {
             
             expect(fetcher).toHaveBeenCalledTimes(2);
             expect(response).toEqual(expectedValue);
+        });
+    });
+
+    describe('verifier', () => {
+        it('should fallback after verifing the fetchers response', async () => {
+            const notOkResponse = 'I failed :(';
+            const fetcher = () => Promise.resolve(notOkResponse);
+            const verifier = (response) => response !== notOkResponse;
+    
+            const response = await withFallback(fetcher, expectedFallbackValue, { verifier });
+    
+            expect(response).toEqual(expectedFallbackValue);
         });
     });
 });

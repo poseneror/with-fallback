@@ -13,7 +13,7 @@ npm install with-fallback
 ## usage
 ---
 
-```js
+```ts
 import withFallback from 'with-fallback'
 
 async function fetchUserImage(uid) {
@@ -22,17 +22,19 @@ async function fetchUserImage(uid) {
     return userDto.image;
 }
 
-const userImage = withFallback(() => fetchUserImage(1), {
+const defaultImage = {
     url: 'default_profile.png',
     width: 50,
     height: 50,
-});
+};
+
+const userImage = withFallback(() => fetchUserImage(1), defaultImage);
 ```
 
 ## Api
 ---
 
-### `withFallback(`fetcher, fallback, options`)`
+### `withFallback(`fetcher, fallback, options`)`:
 ### Arguments:
  - fetcher: `() => Promise<ValueType>` - an async / sync function that returns a value of type \<ValueType>.
  - fallback: `ValueType` - a fallback value of type \<ValueType> that will be returned in case `fetcher` fails (throws)
@@ -41,9 +43,23 @@ const userImage = withFallback(() => fetchUserImage(1), {
     - retry: `RetryOptions:`
         - amount: `number` - the maximum amount of retries to perform (default amount is `0`)
         - duration: `number` - waiting time between retries - in ms (default duration is `1000` ms)
+    - verifier: `(response: ValueType) => boolean` - a function that verifies the response if it didn't throw an error
+        
 
 ### Return Value: 
  - `Promise<ValueType>`
+
+### `fetchResponseVerifier`
+Provide as a verifier to handle fetchApi requests
+
+```ts
+import withFallback, { fetchResponseVerifier } from 'with-fallback'
+
+const userImage = withFallback(() => fetch(`https://my-server/api/users/${uid}`), fallback, { 
+        verifier: fetchResponseVerfier
+});
+```
+This verifies that the response is "ok"
 
 ## Typescript Support
 ---

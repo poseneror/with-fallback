@@ -3,16 +3,12 @@
 
 Wraps a function with a fallback value which will be returned in case the function fails.
 
-## install
----
-
+## setup
 ```bash
 npm install with-fallback
 ```
 
 ## usage
----
-
 ```ts
 import withFallback from 'with-fallback'
 
@@ -32,14 +28,12 @@ const userImage = withFallback(() => fetchUserImage(1), defaultImage);
 ```
 
 ## Api
----
-
 ### `withFallback(`fetcher, fallback, options`)`:
 ### Arguments:
  - fetcher: `() => Promise<ValueType>` - an async / sync function that returns a value of type \<ValueType>.
  - fallback: `ValueType` - a fallback value of type \<ValueType> that will be returned in case `fetcher` fails (throws)
  - options: `WithFallbackOptions`:
-   - logger: `(error: Any) => void` - a logger which will be invoked when a fallback occours.  (default logger is `console.warn`)
+   - logger: `(error: Any) => void` - a logger which will be invoked when a fallback occours.  (default logger is `console.log`)
     - retry: `RetryOptions:`
         - amount: `number` - the maximum amount of retries to perform (default amount is `0`)
         - duration: `number` - waiting time between retries - in ms (default duration is `1000` ms)

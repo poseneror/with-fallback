@@ -22,12 +22,12 @@ describe('with fallback', () => {
 
     it('should log error on fetcher failure', async () => {
         const expectedError = new Error('some-error-message')
-        spyOn(console, 'warn');
+        spyOn(console, 'log');
         const fetcher = () => Promise.reject(expectedError);
 
         await withFallback(fetcher, expectedFallbackValue);
 
-        expect(console.warn).toHaveBeenCalledWith('fallback', expectedError);
+        expect(console.log).toHaveBeenCalledWith('fallback', expectedError);
     });
 
     it('should log error using provided logger on fetcher failure', async () => {
@@ -59,11 +59,22 @@ describe('with fallback', () => {
         it('should fallback after verifing the fetchers response', async () => {
             const notOkResponse = 'I failed :(';
             const fetcher = () => Promise.resolve(notOkResponse);
-            const verifier = (response) => response !== notOkResponse;
-    
+            const verifier = (response: string) => response !== notOkResponse;
+
             const response = await withFallback(fetcher, expectedFallbackValue, { verifier });
-    
+
             expect(response).toEqual(expectedFallbackValue);
+        });
+
+        it('should fallback after verifing the fetchers response', async () => {
+            const notOkResponse = 'I failed :(';
+            const expectedOkResponse = 'I good :)';
+            const fetcher = () => Promise.resolve(expectedOkResponse);
+            const verifier = (response: string) => response !== notOkResponse;
+
+            const response = await withFallback(fetcher, expectedFallbackValue, { verifier });
+
+            expect(response).toEqual(expectedOkResponse);
         });
     });
 });

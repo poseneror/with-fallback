@@ -1,4 +1,4 @@
-import { fetchResponseVerifier } from './response-verifier';
+import { fetchResponseVerifier } from './response-verifiers';
 describe('response verifiers', () => {
     describe('fetch verifier', () => {
         it('should fail on response not ok', () => {

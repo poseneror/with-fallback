@@ -14,7 +14,6 @@ interface WithFallbackOptions<ValueType> {
     verifier?: (response: ValueType) => boolean;
     backupFetcher?: () => Promise<ValueType>;
 }
-// fallback type? backupFetcher type?
 
 async function wait(duration: number) {
     return new Promise((resolve) => setTimeout(resolve, duration));

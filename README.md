@@ -38,12 +38,12 @@ const userImage = withFallback(() => fetchUserImage(1), defaultImage);
         - amount: `number` - the maximum amount of retries to perform (default amount is `0`)
         - duration: `number` - waiting time between retries - in ms (default duration is `1000` ms)
     - verifier: `(response: ValueType) => boolean` - a function that verifies the response if it didn't throw an error
-        
+    - backupFetcher: `() => Promise<ValueType>` - a secondary fetcher that will be tried if the main fetcher fails (it will invoke alternatively when using `retry` and be `verified` and `logged`)
 
 ### Return Value: 
  - `Promise<ValueType>`
 
-### `fetchResponseVerifier`
+### `fetchResponseVerifier`:
 Provide as a verifier to handle fetchApi requests
 
 ```ts
@@ -56,7 +56,5 @@ const userImage = withFallback(() => fetch(`https://my-server/api/users/${uid}`)
 This verifies that the response is "ok"
 
 ## Typescript Support
----
 *withFallback* is strongly typed. 
 And it enforces the fallback value to be of the same type as the fetcher's return value.
-

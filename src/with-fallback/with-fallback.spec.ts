@@ -19,39 +19,39 @@ describe('with fallback', () => {
 
         expect(response).toEqual(expectedFallbackValue);
     });
-
-    it('should log error on fetcher failure', async () => {
-        const expectedError = new Error('some-error-message')
-        spyOn(console, 'log');
-        const fetcher = () => Promise.reject(expectedError);
-
-        await withFallback(fetcher, expectedFallbackValue);
-
-        expect(console.log).toHaveBeenCalledWith('fallback', expectedError);
-    });
-
-    it('should log error using provided logger on fetcher failure', async () => {
-        const expectedError = new Error('some-error-message')
-        const logger = jest.fn();
-        const fetcher = () => Promise.reject(expectedError);
-
-        await withFallback(fetcher, expectedFallbackValue, {logger});
-
-        expect(logger).toHaveBeenCalledWith(expectedError);
-    });
+    
     describe('retry', () => {
         it('should retry on fetcher failure with default duration', async () => {
             const expectedError = new Error('some-error-message')
             const duration = 1000;
             const fetcher = jest.fn().mockResolvedValue(expectedValue)
                 .mockImplementationOnce(() => {
-                throw expectedError
-            });
+                    throw expectedError
+                });
 
-            const response = await withFallback(fetcher, expectedFallbackValue, { retry: {amount: 1, duration} });
-            
+            const response = await withFallback(fetcher, expectedFallbackValue, { retry: { amount: 1, duration } });
+
             expect(fetcher).toHaveBeenCalledTimes(2);
             expect(response).toEqual(expectedValue);
+        });
+
+        describe('backupFetcher', () => {
+            it('should use backupFetcher on fetcher failure', async () => {
+                const expectedError = new Error('some-error-message')
+                const duration = 1000;
+                const fetcher = jest.fn()
+                    .mockRejectedValue(expectedError);
+                const backupFetcher = jest.fn()
+                    .mockResolvedValue(expectedValue)
+                    .mockRejectedValueOnce(expectedError);
+
+                const response = await withFallback(fetcher, expectedFallbackValue, { backupFetcher, retry: { amount: 1, duration } });
+
+                expect(fetcher).toHaveBeenCalledTimes(2);
+                expect(backupFetcher).toHaveBeenCalledTimes(2);
+
+                expect(response).toEqual(expectedValue);
+            });
         });
     });
 
@@ -76,5 +76,53 @@ describe('with fallback', () => {
 
             expect(response).toEqual(expectedOkResponse);
         });
+
+        describe('when backupFetcher is defined', () => {
+            it('should use fallback fetch on fetcher failure', async () => {
+                const fetcher = () => Promise.reject();
+                const backupFetcher = () => Promise.resolve(expectedValue);
+
+                const response = await withFallback(fetcher, expectedFallbackValue, { backupFetcher });
+
+                expect(response).toEqual(expectedValue);
+            });
+        });
+    });
+
+    describe('logger', () => {
+        it('should log error using provided logger on fetcher failure', async () => {
+            const expectedError = new Error('some-error-message')
+            const logger = jest.fn();
+            const fetcher = () => Promise.reject(expectedError);
+
+            await withFallback(fetcher, expectedFallbackValue, { logger });
+
+            expect(logger).toHaveBeenCalledWith(expectedError);
+        });
+
+        describe('when backupFetcher is defined', () => {
+            it('should log error on backupFetcher failure', async () => {
+                const expectedError = new Error('some-error-message')
+                const logger = jest.fn();
+                const fetcher = () => Promise.reject(expectedError);
+                const backupFetcher = () => Promise.reject(expectedError);
+
+                await withFallback(fetcher, expectedFallbackValue, { backupFetcher, logger });
+
+                expect(logger).toHaveBeenNthCalledWith(2, expectedError);
+            });
+        })
+    })
+
+    describe('backupFetcher', () => {
+        it('should use backup fetcher on fetcher failure', async () => {
+            const fetcher = () => Promise.reject();
+            const backupFetcher = () => Promise.resolve(expectedValue);
+
+            const response = await withFallback(fetcher, expectedFallbackValue, { backupFetcher });
+
+            expect(response).toEqual(expectedValue);
+        });
+        
     });
 });

@@ -1,4 +1,4 @@
-import { withFallback } from "./with-fallback";
+import withFallback from "./fetcher-builder";
 
 describe('with fallback', () => {
     const expectedValue = 'some-value';
@@ -78,13 +78,15 @@ describe('with fallback', () => {
         });
 
         describe('when backupFetcher is defined', () => {
-            it('should use fallback fetch on fetcher failure', async () => {
+            it('should use fallback backupFetcher verification failure', async () => {
+                const notOkResponse = 'I failed :(';
                 const fetcher = () => Promise.reject();
-                const backupFetcher = () => Promise.resolve(expectedValue);
+                const verifier = (response: string) => response !== notOkResponse;
+                const backupFetcher = () => Promise.resolve(notOkResponse);
 
-                const response = await withFallback(fetcher, expectedFallbackValue, { backupFetcher });
+                const response = await withFallback(fetcher, expectedFallbackValue, { backupFetcher, verifier });
 
-                expect(response).toEqual(expectedValue);
+                expect(response).toEqual(expectedFallbackValue);
             });
         });
     });

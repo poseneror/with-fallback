@@ -1,14 +1,14 @@
 import { Fetcher, FetcherModifier } from "../types";
-import { RetryOptions, withRetry } from "../fetcher-modifiers/with-retry";
-import { withVerfication } from "../fetcher-modifiers/with-verification";
-import { withLogger } from "../fetcher-modifiers/with-logger";
+import { withVerfication, ResponseVerifier } from "../fetcher-modifiers/with-verification";
+import { withLogger, Logger } from "../fetcher-modifiers/with-logger";
 import { withBackup } from "../fetcher-modifiers/with-backup";
+import { RetryOptions, withRetry } from "../fetcher-modifiers/with-retry";
 import { withFallback } from "../fetcher-modifiers/with-fallback";
 
 interface WithFallbackOptions<ValueType> {
-    logger?: (error: any) => void;
+    logger?: Logger;
     retry?: RetryOptions;
-    verifier?: (response: ValueType) => boolean;
+    verifier?: ResponseVerifier<ValueType>;
     backupFetcher?: Fetcher<ValueType>;
 }
 
